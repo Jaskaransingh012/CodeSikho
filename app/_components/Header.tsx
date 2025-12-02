@@ -12,36 +12,37 @@ import {
     NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
 import Link from 'next/link'
+import { SignedIn, SignedOut, SignUpButton, UserButton } from '@clerk/nextjs'
 
 const courses = [
     {
-        id:1,
-        name:"HTML",
-        desc :"Learn the fundamentals of the Html and build the structure of modern website",
+        id: 1,
+        name: "HTML",
+        desc: "Learn the fundamentals of the Html and build the structure of modern website",
         path: "/courses/1/detail"
     },
     {
-        id:2,
-        name:"CSS",
-        desc :"Learn how to style your website using CSS and make it visually appealing",
+        id: 2,
+        name: "CSS",
+        desc: "Learn how to style your website using CSS and make it visually appealing",
         path: "/courses/2/detail"
     },
     {
-        id:3,
-        name:"JavaScript",
-        desc :"Learn how to add interactivity to your website using JavaScript and make it dynamic",
+        id: 3,
+        name: "JavaScript",
+        desc: "Learn how to add interactivity to your website using JavaScript and make it dynamic",
         path: "/courses/3/detail"
     },
     {
-        id:4,
-        name:"React",
-        desc :"Learn how to build reusable UI components using React and make your website more efficient",
+        id: 4,
+        name: "React",
+        desc: "Learn how to build reusable UI components using React and make your website more efficient",
         path: "/courses/4/detail"
     },
     {
-        id:5,
-        name:"Next.js",
-        desc :"Learn how to build server-side rendered websites using Next.js and make your website more scalable",
+        id: 5,
+        name: "Next.js",
+        desc: "Learn how to build server-side rendered websites using Next.js and make your website more scalable",
         path: "/courses/5/detail"
     }
 ]
@@ -101,7 +102,18 @@ function Header() {
             </NavigationMenu>
 
             {/* Signup button */}
-            <Button variant={'pixel'} className='font-game text-2xl'>Signup</Button>
+            <div className='flex gap-5 items-center'>
+
+
+                <SignedOut>
+                    <Link href={'/sign-up'}><Button variant={'pixel'} className='font-game text-2xl'>Signup</Button></Link>
+                </SignedOut>
+                <SignedIn>
+                    <Link href={'/dashboard'}><Button variant={'pixel'} className='font-game text-2xl'>Dashboard</Button></Link>
+                    <UserButton />
+                </SignedIn>
+            </div>
+
         </div>
     )
 }
