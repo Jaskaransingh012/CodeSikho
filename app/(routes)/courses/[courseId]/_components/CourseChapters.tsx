@@ -16,6 +16,44 @@ type Props = {
   courseDetail: Course | undefined;
 }
 function CourseChapters({ loading, courseDetail }: Props) {
+
+  const EnableExercise = (
+    chapterIndex: number,
+    exerciseIndex: number,
+    chapterExercisesLength: number
+  ) => {
+    const completed = courseDetail?.completedExcercises;
+
+    // If nothing is completed, enable FIRST exercise ONLY
+    if (!completed || completed.length === 0) {
+      return chapterIndex === 0 && exerciseIndex === 0;
+    }
+
+    // last completed
+    const last = completed[completed.length - 1];
+
+    // Convert to global exercise number
+    const currentExerciseNumber =
+      chapterIndex * chapterExercisesLength + exerciseIndex + 1;
+
+    const lastCompletedNumber =
+      (last.chapterId - 1) * chapterExercisesLength + last.excerciseId;
+
+    return currentExerciseNumber === lastCompletedNumber + 1;
+  };
+
+  const isExcerciseCompeted = (chapterId: number, ExerciseId: number) => {
+    const completedChapters = courseDetail?.completedExcercises;
+    const completeChapter = completedChapters?.find(item => {
+      console.log("chapterid",item.chapterId, chapterId);
+      console.log("excerciseId", item.excerciseId,ExerciseId)
+       return item.chapterId == chapterId && item.excerciseId == ExerciseId 
+      })
+    console.log("complete", completeChapter);
+    return completeChapter ? true : false;
+  }
+
+
   return (
     <div>
       {
@@ -43,21 +81,35 @@ function CourseChapters({ loading, courseDetail }: Props) {
 
                             <h2 className=' text-3xl '>Excercise {(index * chapter?.excercises.length) + excIndex + 1}</h2>
                             <h2 className='text-3xl '>{excercise.name}</h2>
-                            
-                          </div>
-                          {/* <Button className='text-2xl font-game' size={'lg'} variant={'pixel'}>{excercise?.xp} xp</Button> */}
 
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <Button className='text-2xl font-game' size={'lg'} variant={'pixelDisabled'}>???</Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p className='text-lg font-game text-gray-500'>First Enroll</p>
-                            </TooltipContent>
-                          </Tooltip>
-                          
-                          
-                          
+                          </div>
+                          {
+                            isExcerciseCompeted(chapter?.id, excIndex + 1) ?
+                              <Button className='text-2xl font-game' size={'lg'} variant={'greenPixel'}>{excercise?.xp} xp</Button> :
+                              <>
+
+                                {
+                                  EnableExercise(index, excIndex, chapter?.excercises?.length) ?
+                                    <Button className='text-2xl font-game' size={'lg'} variant={'pixel'}>{excercise?.xp} xp</Button>
+                                    :
+
+                                    <Tooltip>
+                                      <TooltipTrigger>
+                                        <Button className='text-2xl font-game' size={'lg'} variant={'pixelDisabled'}>???</Button>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p className='text-lg font-game text-gray-500'>First Enroll</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                }
+                              </>
+                          }
+
+
+
+
+
+
 
                         </div>
                       ))}

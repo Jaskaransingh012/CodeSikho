@@ -15,6 +15,7 @@ function CourseStatus({courseDetail}: props) {
     },[courseDetail])
 
     const[excerciseBar, setExcerciseBar] = useState(0); 
+    const [xpBar, setxpBar] = useState(0);
 
     const [counts, setCounts] = useState<{
         totalExcercises: number;
@@ -35,8 +36,15 @@ function CourseStatus({courseDetail}: props) {
             totalExcercises:totalExcercises,
             totalXP:totalXP
         })
+        const xpValue = courseDetail?.enrolledCourseDetail?.xpEarned || 0;
+        const barValue = xpValue / totalXP * 100;
+
+        const excercise = courseDetail?.completedExcercises?.length || 0;
+        const excerciseBar = excercise / totalExcercises * 100;
+        
         setTimeout(() => {
-                setExcerciseBar(100); 
+                setExcerciseBar(excerciseBar); 
+                setxpBar(barValue);
             }, 2000); 
     }
 
@@ -47,7 +55,7 @@ function CourseStatus({courseDetail}: props) {
         <div className='flex items-center mt-4 gap-5'>
             <Image src={'/book.png'} alt='book' width={50} height={50} />
             <div className='w-full'>
-                <h2 className='flex justify-between text-2xl w-full'>Excercises <span className='text-gray-400'>1/{counts?.totalExcercises}</span></h2>
+                <h2 className='flex justify-between text-2xl w-full'>Excercises <span className='text-gray-400'>{courseDetail?.completedExcercises?.length}/{counts?.totalExcercises}</span></h2>
                 <Progress
                 className="mt-2 transition-all duration-3000 ease-out"
                 value={excerciseBar} />
@@ -56,9 +64,9 @@ function CourseStatus({courseDetail}: props) {
         <div className='flex items-center mt-4 gap-5'>
             <Image src={'/star.png'} alt='book' width={50} height={50} />
             <div className='w-full'>
-                <h2 className='flex justify-between text-2xl w-full'>XP Earned <span className='text-gray-400'>{counts?.totalXP}</span></h2>
+                <h2 className='flex justify-between text-2xl w-full'>XP Earned <span className='text-gray-400'>{courseDetail?.enrolledCourseDetail?.xpEarned}/{counts?.totalXP}</span></h2>
                  <Progress 
-                        value={32}
+                        value={xpBar}
                         className="mt-2 transition-all duration-[1500ms] ease-out"
                     />
             </div>
