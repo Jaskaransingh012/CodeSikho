@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono,Pixelify_Sans,Inter,Jersey_10 } from "next/font/google";
+import { Geist, Geist_Mono, Pixelify_Sans, Inter, Jersey_10 } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { ClerkProvider } from '@clerk/nextjs';
+import Header from "./_components/Header";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,9 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 const gameFont = Jersey_10({
-  subsets : ["latin"],
-  variable : "--font-game",
-  weight : "400"
+  subsets: ["latin"],
+  variable: "--font-game",
+  weight: "400"
 })
 
 const inter = Inter({
@@ -39,14 +42,23 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${gameFont.variable} ${inter.variable} antialiased`}
       >
-         <ThemeProvider
+        <ClerkProvider>
+          <ThemeProvider
             attribute="class"
             defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >
+            <div className="flex flex-col items-center">
+              <Header />
+            </div>
+
             {children}
+
+
           </ThemeProvider>
+        </ClerkProvider>
+        <Toaster />
       </body>
     </html>
   );
