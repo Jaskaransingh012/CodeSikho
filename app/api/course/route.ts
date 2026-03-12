@@ -15,6 +15,8 @@ export async function GET(req: NextRequest) {
         const result = await db.select().from(courseTable).where(eq(courseTable.courseId, parseInt(courseId)));
 
         const chapterResult = await db.select().from(corseChaptersTable).where(eq(corseChaptersTable.courseId, parseInt(courseId)));
+        
+        const sortedchapterResult = chapterResult.sort((a,b) => a?.chapterId - b?.chapterId)
 
         // @ts-ignore
         const enrolledCourse = await db.select().from(EnrolledCourseTable).where(and(eq(EnrolledCourseTable?.courseId, courseId), eq(EnrolledCourseTable?.userId, user?.primaryEmailAddress?.emailAddress)));
@@ -33,7 +35,7 @@ export async function GET(req: NextRequest) {
 
         return NextResponse.json({
             ...result[0],
-            chapters: chapterResult,
+            chapters: sortedchapterResult,
             isEnrolled,
             enrolledCourseDetail: enrolledCourse[0],
             completedExcercises,

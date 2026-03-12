@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import Link from 'next/link';
 // import { TooltipTrigger } from '@radix-ui/react-tooltip';
 
 type Props = {
@@ -45,11 +46,8 @@ function CourseChapters({ loading, courseDetail }: Props) {
   const isExcerciseCompeted = (chapterId: number, ExerciseId: number) => {
     const completedChapters = courseDetail?.completedExcercises;
     const completeChapter = completedChapters?.find(item => {
-      console.log("chapterid",item.chapterId, chapterId);
-      console.log("excerciseId", item.excerciseId,ExerciseId)
        return item.chapterId == chapterId && item.excerciseId == ExerciseId 
       })
-    console.log("complete", completeChapter);
     return completeChapter ? true : false;
   }
 
@@ -85,12 +83,20 @@ function CourseChapters({ loading, courseDetail }: Props) {
                           </div>
                           {
                             isExcerciseCompeted(chapter?.id, excIndex + 1) ?
-                              <Button className='text-2xl font-game' size={'lg'} variant={'greenPixel'}>{excercise?.xp} xp</Button> :
+                            <Link href={'/'} >
+                              <Button className='text-2xl font-game' size={'lg'} variant={'greenPixel'}>{excercise?.xp} xp</Button>
+                              </Link>
+                               :
+
                               <>
 
                                 {
                                   EnableExercise(index, excIndex, chapter?.excercises?.length) ?
+                                  <Link href={`/courses/${courseDetail?.courseId}/${chapter?.chapterId}/${excercise?.slug}`}>
+                                 
                                     <Button className='text-2xl font-game' size={'lg'} variant={'pixel'}>{excercise?.xp} xp</Button>
+
+                                     </Link>
                                     :
 
                                     <Tooltip>
