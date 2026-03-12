@@ -1,3 +1,4 @@
+"use client";
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import React from 'react'
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import Link from 'next/link'
 import { SignedIn, SignedOut, SignUpButton, UserButton } from '@clerk/nextjs'
+import { useParams, usePathname } from 'next/navigation'
 
 const courses = [
     {
@@ -49,6 +51,10 @@ const courses = [
 
 
 function Header() {
+    // const path = usePathname();
+    const {excerciseslug} = useParams();
+
+
     return (
         <div className='p-4 max-w-7xl flex justify-between items-center w-full'>
             <div className='flex gap-2 items-center'>
@@ -58,7 +64,10 @@ function Header() {
 
 
             {/* Navbar */}
-            <NavigationMenu>
+            {
+                !excerciseslug ? 
+
+                <NavigationMenu>
                 <NavigationMenuList className='gap-4'>
                     <NavigationMenuItem>
                         <NavigationMenuTrigger>Courses</NavigationMenuTrigger>
@@ -100,6 +109,11 @@ function Header() {
 
 
             </NavigationMenu>
+
+                :
+                <h2 className='text-4xl font-game capitalize'>{excerciseslug?.toString()?.replaceAll("-", " ")}</h2>
+            }
+            
 
             {/* Signup button */}
             <div className='flex gap-5 items-center'>

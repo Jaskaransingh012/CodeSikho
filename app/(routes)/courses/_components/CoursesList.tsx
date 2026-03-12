@@ -35,10 +35,11 @@ type Chapter = {
     desc: string,
     name: string,
     id: number,
+    chapterId: number,
     excercises: exercise[]
 }
 
-type exercise={
+export type exercise={
     name: string,
     slug: string,
     xp: number,
